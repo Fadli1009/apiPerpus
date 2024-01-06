@@ -12,15 +12,8 @@ class BookController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $data = Book::all();
+        return response()->json(['data'=>$data]);
     }
 
     /**
@@ -28,7 +21,18 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {            
+            Book::create([
+                'judulBuku'=>$request->judulBuku,
+                'hargaBuku'=>$request->hargaBuku,
+                'id_category'=>$request->id_category,
+                'sipnosis'=>$request->sipnosis,
+                'coverBuku'=>$request->coverBuku
+            ]);
+            return response()->json(['message'=>'successs'],200);
+        } catch (\Exception $e) {
+            return response()->json(['message'=>'error','error'=>$e->getMessage()],500);
+        }
     }
 
     /**
@@ -36,15 +40,11 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Book $book)
-    {
-        //
+        try {            
+            return response()->json(['data'=>$book]);
+        } catch (\Throwable $th) {
+            return response()->json(['message'=>'error','error'=>$th->getMessage()],500);
+        }
     }
 
     /**
@@ -52,7 +52,19 @@ class BookController extends Controller
      */
     public function update(Request $request, Book $book)
     {
-        //
+        try {
+            $data = $request->validate([
+                'judulBuku'=>'required',
+                'hargaBuku'=>'required',
+                'id_category'=>'required',
+                'sipnosis'=>'required',
+                'coverBuku'=>'required'
+            ]);
+            $book->update($data);
+            return response()->json(['data'=>$book]);
+        } catch (\Throwable $th) {
+            return response()->json(['message'=>'error','error'=>$th->getMessage()]);
+        }
     }
 
     /**
@@ -60,6 +72,11 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
-        //
+        try {
+            $book->delete();
+            return response()->json(['message'=>'berhasil menghapus data'],200);
+        } catch (\Throwable $th) {
+            return response()->json(['message'=>'error','error'=>$th->getMessage()]);
+        }
     }
 }

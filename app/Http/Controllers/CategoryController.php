@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use PhpParser\Node\Stmt\TryCatch;
 
 class CategoryController extends Controller
 {
@@ -12,15 +13,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $data = Category::all();
+        return response()->json(['data'=>$data],200);
     }
 
     /**
@@ -28,7 +22,14 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            Category::create([
+                'namaCategory'=>$request->namaCategory
+            ]);
+            return response()->json(['message'=>'berhasil memasukan data'],200);
+        } catch (\Throwable $th) {
+            return response()->json(['message'=>'error','error'=>$th->getMessage()],500);
+        }
     }
 
     /**
@@ -36,23 +37,25 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        try {
+            return response()->json(['category'=>$category],200);
+        } catch (\Throwable $th) {
+            return response()->json(['message'=>'error','error'=>$th->getMessage()],500);
+        }
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Category $category)
-    {
-        //
-    }
-
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Category $category)
     {
-        //
+        try {
+            $category->update([
+                'namaCategory'=>$request->namaCategory
+            ]);
+            return response()->json(['category'=>$category],200);
+        } catch (\Throwable $th) {
+            return response()->json(['message'=>'error','error'=>$th->getMessage()],500);
+        }
     }
 
     /**
@@ -60,6 +63,11 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        try {
+            $category->delete();
+            return response()->json(['message'=>'berhasil menghapus'],200);
+        } catch (\Throwable $th) {
+            return response()->json(['message'=>'error','error'=>$th->getMessage()],500);
+        }
     }
 }
