@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BooksController;
 use App\Http\Controllers\CategoryController;
@@ -23,3 +24,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::resource('/book',BookController::class);
 Route::resource('/category',CategoryController::class);
 Route::post('book/searchbook',[BooksController::class,'search']);
+Route::post('/book/favorite',[BooksController::class,'favorite']);
+Route::group([
+    'middleware'=>'api',
+    'prefix'=>'auth',
+], function(){
+    Route::post('/login', [AuthController::class,'login'])->name('login');
+    Route::post('/registrasi', [AuthController::class,'registration']);
+    Route::post('/logout', [AuthController::class,'logout']);
+    Route::post('/refresh', [AuthController::class,'refresh']);
+    Route::post('/me', [AuthController::class,'me']);
+});
