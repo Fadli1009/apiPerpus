@@ -24,7 +24,7 @@ class BooksController extends Controller
         try {
             $data = Favorite::create([
                 'id_buku' => $request->id_buku,
-                'id_user' =>$request->id_user
+                'id_user' =>auth()->user()->id  
             ]);
             return response()->json(['data'=>$data]);
         } catch (\Throwable $th) {
