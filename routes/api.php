@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BooksController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -35,3 +36,6 @@ Route::group([
     Route::post('/refresh', [AuthController::class,'refresh']);
     Route::post('/me', [AuthController::class,'me']);
 });
+Route::post('/book/cart',[BooksController::class,'cart']);
+Route::get('/book/cart/me',[BooksController::class,'cartme']);
+// Route::resource('/cartme', CartController::class);
